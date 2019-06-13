@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JInputValidatorPreferences.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JInputValidator</a> &gt; <a href="index.source.html" class="el_package">com.alexandriasoftware.swing</a> &gt; <span class="el_source">JInputValidatorPreferences.java</span></div><h1>JInputValidatorPreferences.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2019 Randall Wood
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.alexandriasoftware.swing;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.SystemColor;
+import java.io.IOException;
+import java.util.prefs.Preferences;
+import javax.swing.JLabel;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Preferences for a JInputValidator. By default the preferences are pulled from
+ * a {@link java.util.prefs.Preferences} object for the package
+ * {@code com.alexandriasoftware.swing} with the following keys:
+ * &lt;dl&gt;
+ * &lt;dt&gt;font (String)&lt;/dt&gt;
+ * &lt;dd&gt;Path to a font that can be loaded using
+ * {@link java.lang.Class#getResourceAsStream(java.lang.String)}.&lt;/dd&gt;
+ * &lt;dt&gt;unknown.icon (String)&lt;/dt&gt;
+ * &lt;dd&gt;The character or Unicode sequence for the character that represents
+ * {@link Validation.Type#UNKNOWN}&lt;/dd&gt;
+ * &lt;dt&gt;unknown.color (int)&lt;/dt&gt;
+ * &lt;dd&gt;The color that represents {@link Validation.Type#UNKNOWN}&lt;/dd&gt;
+ * &lt;dt&gt;information.icon (String)&lt;/dt&gt;
+ * &lt;dd&gt;The character or Unicode sequence for the character that represents
+ * {@link Validation.Type#INFORMATION}&lt;/dd&gt;
+ * &lt;dt&gt;information.color (int)&lt;/dt&gt;
+ * &lt;dd&gt;The color that represents {@link Validation.Type#INFORMATION}&lt;/dd&gt;
+ * &lt;dt&gt;success.icon (String)&lt;/dt&gt;
+ * &lt;dd&gt;The character or Unicode sequence for the character that represents
+ * {@link Validation.Type#SUCCESS}&lt;/dd&gt;
+ * &lt;dt&gt;success.color (int)&lt;/dt&gt;
+ * &lt;dd&gt;The color that represents {@link Validation.Type#SUCCESS}&lt;/dd&gt;
+ * &lt;dt&gt;warning.icon (String)&lt;/dt&gt;
+ * &lt;dd&gt;The character or Unicode sequence for the character that represents
+ * {@link Validation.Type#WARNING}&lt;/dd&gt;
+ * &lt;dt&gt;warning.color (int)&lt;/dt&gt;
+ * &lt;dd&gt;The color that represents {@link Validation.Type#WARNING}&lt;/dd&gt;
+ * &lt;dt&gt;danger.icon (String)&lt;/dt&gt;
+ * &lt;dd&gt;The character or Unicode sequence for the character that represents
+ * {@link Validation.Type#DANGER}&lt;/dd&gt;
+ * &lt;dt&gt;danger.color (int)&lt;/dt&gt;
+ * &lt;dd&gt;The color that represents {@link Validation.Type#DANGER}&lt;/dd&gt;
+ * &lt;dd&gt;
+ * &lt;/dl&gt;
+ *
+ * @author Randall Wood
+ */
+public class JInputValidatorPreferences {
+
+<span class="fc" id="L67">    private static JInputValidatorPreferences defaultPreferences = null;</span>
+
+    /**
+     * Get the default preferences object. This object uses the default
+     * {@link java.util.prefs.Preferences}, so application-wide defaults can be
+     * set by setting preferences keys appropriately before calling this method.
+     *
+     * @return the default preferences
+     */
+    public synchronized static JInputValidatorPreferences getPreferences() {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (defaultPreferences == null) {</span>
+<span class="fc" id="L78">            defaultPreferences = new JInputValidatorPreferences();</span>
+        }
+<span class="fc" id="L80">        return defaultPreferences;</span>
+    }
+
+    /**
+     * Get a set of preferences using a {@link java.util.prefs.Preferences}
+     * object. The Preferences must contain the keys listed above, but not
+     * necessarily within the package specified above.
+     *
+     * @param preferences the preferences to use
+     * @return the preferences for a specific scenario 
+     */
+    public static JInputValidatorPreferences getPreferences(Preferences preferences) {
+<span class="nc" id="L92">        return new JInputValidatorPreferences(preferences);</span>
+    }
+
+    private final Font font;
+    private final String unknownIcon;
+    private final Color unknownColor;
+    private final String informationIcon;
+    private final Color informationColor;
+    private final String successIcon;
+    private final Color successColor;
+    private final String warningIcon;
+    private final Color warningColor;
+    private final String dangerIcon;
+    private final Color dangerColor;
+
+    private JInputValidatorPreferences() {
+<span class="fc" id="L108">        this(Preferences.userNodeForPackage(JInputValidatorPreferences.class));</span>
+<span class="fc" id="L109">    }</span>
+
+<span class="fc" id="L111">    private JInputValidatorPreferences(Preferences preferences) {</span>
+<span class="fc" id="L112">        String patternfly = &quot;/org/patternfly/PatternFlyIcons-webfont.ttf&quot;;</span>
+        Font f;
+        try {
+<span class="fc" id="L115">            f = Font.createFont(Font.TRUETYPE_FONT, JInputValidatorPreferences.class.getResourceAsStream(preferences.get(&quot;font&quot;, patternfly)));</span>
+        }
+<span class="nc" id="L117">        catch (FontFormatException | IOException ex) {</span>
+<span class="nc" id="L118">            LoggerFactory.getLogger(this.getClass()).error(&quot;Unable to get Font resource named {}&quot;, preferences.get(&quot;font&quot;, patternfly), ex);</span>
+<span class="nc" id="L119">            f = (new JLabel()).getFont();</span>
+<span class="fc" id="L120">        }</span>
+<span class="fc" id="L121">        font = f;</span>
+<span class="fc" id="L122">        unknownIcon = preferences.get(&quot;unknown.icon&quot;, &quot;\ue605&quot;);</span>
+<span class="fc" id="L123">        unknownColor = new Color(preferences.getInt(&quot;unknown.color&quot;, 0x73BCF7));</span>
+<span class="fc" id="L124">        informationIcon = preferences.get(&quot;information.icon&quot;, &quot;\ue92b&quot;);</span>
+<span class="fc" id="L125">        informationColor = new Color(preferences.getInt(&quot;information.color&quot;, 0x73BCF7));</span>
+<span class="fc" id="L126">        successIcon = preferences.get(&quot;success.icon&quot;, &quot;\ue602&quot;);</span>
+<span class="fc" id="L127">        successColor = new Color(preferences.getInt(&quot;success.color&quot;, 0x92D400));</span>
+<span class="fc" id="L128">        warningIcon = preferences.get(&quot;warning.icon&quot;, &quot;\ue913&quot;);</span>
+<span class="fc" id="L129">        warningColor = new Color(preferences.getInt(&quot;warning.color&quot;, 0xF0AB00));</span>
+<span class="fc" id="L130">        dangerIcon = preferences.get(&quot;danger.icon&quot;, &quot;\ue926&quot;);</span>
+<span class="fc" id="L131">        dangerColor = new Color(preferences.getInt(&quot;danger.color&quot;, 0xC9190B));</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Get the font to use.
+     *
+     * @return the font
+     */
+    public Font getFont() {
+<span class="fc" id="L140">        return font;</span>
+    }
+
+    /**
+     * Get the icon for the specified type. Note the icon can be any string that
+     * can be rendered using the font returned by {@link #getFont()} although it
+     * is recommended this be a Unicode glyph or emoji-style icon.
+     *
+     * @param type the validation type to get
+     * @return the specified icon or an empty String if type is
+     *         {@link Validation.Type#NONE} or not recognized
+     */
+    public String getIcon(Validation.Type type) {
+<span class="pc bpc" id="L153" title="2 of 6 branches missed.">        switch (type) {</span>
+            case UNKNOWN:
+<span class="nc" id="L155">                return unknownIcon;</span>
+            case INFORMATION:
+<span class="fc" id="L157">                return informationIcon;</span>
+            case SUCCESS:
+<span class="fc" id="L159">                return successIcon;</span>
+            case WARNING:
+<span class="nc" id="L161">                return warningIcon;</span>
+            case DANGER:
+<span class="fc" id="L163">                return dangerIcon;</span>
+            case NONE:
+            default:
+                // ignored, so return empty string
+<span class="fc" id="L167">                return &quot;&quot;;</span>
+        }
+    }
+
+    /**
+     * Get the icon for the specified type.
+     *
+     * @param type the validation type to get
+     * @return the specified color or {@link java.awt.SystemColor#textText} if
+     *         type is {@link Validation.Type#NONE} or not recognized
+     */
+    public Color getColor(Validation.Type type) {
+<span class="pc bpc" id="L179" title="4 of 6 branches missed.">        switch (type) {</span>
+            case UNKNOWN:
+<span class="nc" id="L181">                return unknownColor;</span>
+            case INFORMATION:
+<span class="fc" id="L183">                return informationColor;</span>
+            case SUCCESS:
+<span class="nc" id="L185">                return successColor;</span>
+            case WARNING:
+<span class="nc" id="L187">                return warningColor;</span>
+            case DANGER:
+<span class="nc" id="L189">                return dangerColor;</span>
+            case NONE:
+            default:
+                // ignored, so return anything
+<span class="fc" id="L193">                return SystemColor.textText;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

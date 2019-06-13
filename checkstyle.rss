@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2019</copyright>
     <item>
-      <title>File: 5,
+      <title>File: 7,
              Errors: 165,
              Warnings: 0,
              Infos: 0
@@ -83,7 +83,35 @@ under the License.
                   0
                 </td>
                 <td>
-                  38
+                  37
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.VerifyingValidatorBeanInfo.java">com/alexandriasoftware/swing/VerifyingValidatorBeanInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.JInputValidatorBeanInfo.java">com/alexandriasoftware/swing/JInputValidatorBeanInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -97,7 +125,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  35
+                  31
                 </td>
               </tr>
                           <tr>
@@ -111,7 +139,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  20
+                  25
                 </td>
               </tr>
                       </tbody>

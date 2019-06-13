@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.alexandriasoftware.swing","l":"JInputValidatorSwingTest"},{"p":"com.alexandriasoftware.swing","l":"JInputValidatorTest"}]
