@@ -3,7 +3,7 @@ JInputValidator,com.alexandriasoftware.swing,VerifyingValidator,21,26,0,2,4,6,2,
 JInputValidator,com.alexandriasoftware.swing,Validation.Type,0,64,0,0,0,7,0,1,0,1
 JInputValidator,com.alexandriasoftware.swing,Validation,0,40,0,0,0,12,0,7,0,7
 JInputValidator,com.alexandriasoftware.swing,JInputValidator.new DocumentListener() {...},0,56,0,2,0,14,0,6,0,5
-JInputValidator,com.alexandriasoftware.swing,JInputValidatorPreferences,39,138,6,8,10,31,7,12,1,7
+JInputValidator,com.alexandriasoftware.swing,JInputValidatorPreferences,39,174,6,8,10,32,7,12,1,7
 JInputValidator,com.alexandriasoftware.swing,JInputValidator,22,220,8,14,8,53,7,20,1,15
 JInputValidator,com.alexandriasoftware.swing.border,ValidatorBorder.new AbstractBorder() {...},80,29,0,0,12,5,2,2,2,2
 JInputValidator,com.alexandriasoftware.swing.border,ValidatorBorder,0,48,0,2,0,10,0,3,0,2

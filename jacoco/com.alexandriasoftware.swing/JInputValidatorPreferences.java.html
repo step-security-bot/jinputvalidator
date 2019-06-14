@@ -86,7 +86,7 @@ public class JInputValidatorPreferences {
      * necessarily within the package specified above.
      *
      * @param preferences the preferences to use
-     * @return the preferences for a specific scenario 
+     * @return the preferences for a specific scenario
      */
     public static JInputValidatorPreferences getPreferences(Preferences preferences) {
 <span class="nc" id="L92">        return new JInputValidatorPreferences(preferences);</span>
@@ -109,27 +109,28 @@ public class JInputValidatorPreferences {
 <span class="fc" id="L109">    }</span>
 
 <span class="fc" id="L111">    private JInputValidatorPreferences(Preferences preferences) {</span>
-<span class="fc" id="L112">        String patternfly = &quot;/org/patternfly/PatternFlyIcons-webfont.ttf&quot;;</span>
+<span class="fc" id="L112">        Preferences defaults = Preferences.userNodeForPackage(JInputValidatorPreferences.class);</span>
+<span class="fc" id="L113">        String patternfly = &quot;/org/patternfly/PatternFlyIcons-webfont.ttf&quot;;</span>
         Font f;
         try {
-<span class="fc" id="L115">            f = Font.createFont(Font.TRUETYPE_FONT, JInputValidatorPreferences.class.getResourceAsStream(preferences.get(&quot;font&quot;, patternfly)));</span>
+<span class="fc" id="L116">            f = Font.createFont(Font.TRUETYPE_FONT, JInputValidatorPreferences.class.getResourceAsStream(preferences.get(&quot;font&quot;, defaults.get(&quot;font&quot;, patternfly))));</span>
         }
-<span class="nc" id="L117">        catch (FontFormatException | IOException ex) {</span>
-<span class="nc" id="L118">            LoggerFactory.getLogger(this.getClass()).error(&quot;Unable to get Font resource named {}&quot;, preferences.get(&quot;font&quot;, patternfly), ex);</span>
-<span class="nc" id="L119">            f = (new JLabel()).getFont();</span>
-<span class="fc" id="L120">        }</span>
-<span class="fc" id="L121">        font = f;</span>
-<span class="fc" id="L122">        unknownIcon = preferences.get(&quot;unknown.icon&quot;, &quot;\ue605&quot;);</span>
-<span class="fc" id="L123">        unknownColor = new Color(preferences.getInt(&quot;unknown.color&quot;, 0x73BCF7));</span>
-<span class="fc" id="L124">        informationIcon = preferences.get(&quot;information.icon&quot;, &quot;\ue92b&quot;);</span>
-<span class="fc" id="L125">        informationColor = new Color(preferences.getInt(&quot;information.color&quot;, 0x73BCF7));</span>
-<span class="fc" id="L126">        successIcon = preferences.get(&quot;success.icon&quot;, &quot;\ue602&quot;);</span>
-<span class="fc" id="L127">        successColor = new Color(preferences.getInt(&quot;success.color&quot;, 0x92D400));</span>
-<span class="fc" id="L128">        warningIcon = preferences.get(&quot;warning.icon&quot;, &quot;\ue913&quot;);</span>
-<span class="fc" id="L129">        warningColor = new Color(preferences.getInt(&quot;warning.color&quot;, 0xF0AB00));</span>
-<span class="fc" id="L130">        dangerIcon = preferences.get(&quot;danger.icon&quot;, &quot;\ue926&quot;);</span>
-<span class="fc" id="L131">        dangerColor = new Color(preferences.getInt(&quot;danger.color&quot;, 0xC9190B));</span>
-<span class="fc" id="L132">    }</span>
+<span class="nc" id="L118">        catch (FontFormatException | IOException ex) {</span>
+<span class="nc" id="L119">            LoggerFactory.getLogger(this.getClass()).error(&quot;Unable to get Font resource named {}&quot;, preferences.get(&quot;font&quot;, patternfly), ex);</span>
+<span class="nc" id="L120">            f = (new JLabel()).getFont();</span>
+<span class="fc" id="L121">        }</span>
+<span class="fc" id="L122">        font = f;</span>
+<span class="fc" id="L123">        unknownIcon = preferences.get(&quot;unknown.icon&quot;, defaults.get(&quot;unknown.icon&quot;, &quot;\ue605&quot;));</span>
+<span class="fc" id="L124">        unknownColor = new Color(preferences.getInt(&quot;unknown.color&quot;, defaults.getInt(&quot;inknown.color&quot;, 0x73BCF7)));</span>
+<span class="fc" id="L125">        informationIcon = preferences.get(&quot;information.icon&quot;, defaults.get(&quot;information.icon&quot;, &quot;\ue92b&quot;));</span>
+<span class="fc" id="L126">        informationColor = new Color(preferences.getInt(&quot;information.color&quot;, defaults.getInt(&quot;information.color&quot;, 0x73BCF7)));</span>
+<span class="fc" id="L127">        successIcon = preferences.get(&quot;success.icon&quot;, defaults.get(&quot;success.icon&quot;, &quot;\ue602&quot;));</span>
+<span class="fc" id="L128">        successColor = new Color(preferences.getInt(&quot;success.color&quot;, defaults.getInt(&quot;success.color&quot;, 0x92D400)));</span>
+<span class="fc" id="L129">        warningIcon = preferences.get(&quot;warning.icon&quot;, defaults.get(&quot;warning.icon&quot;, &quot;\ue913&quot;));</span>
+<span class="fc" id="L130">        warningColor = new Color(preferences.getInt(&quot;warning.color&quot;, defaults.getInt(&quot;warning.color&quot;, 0xF0AB00)));</span>
+<span class="fc" id="L131">        dangerIcon = preferences.get(&quot;danger.icon&quot;, defaults.get(&quot;danger.icon&quot;, &quot;\ue926&quot;));</span>
+<span class="fc" id="L132">        dangerColor = new Color(preferences.getInt(&quot;danger.color&quot;, defaults.getInt(&quot;danger.color&quot;, 0xC9190B)));</span>
+<span class="fc" id="L133">    }</span>
 
     /**
      * Get the font to use.
@@ -137,7 +138,7 @@ public class JInputValidatorPreferences {
      * @return the font
      */
     public Font getFont() {
-<span class="fc" id="L140">        return font;</span>
+<span class="fc" id="L141">        return font;</span>
     }
 
     /**
@@ -150,21 +151,21 @@ public class JInputValidatorPreferences {
      *         {@link Validation.Type#NONE} or not recognized
      */
     public String getIcon(Validation.Type type) {
-<span class="pc bpc" id="L153" title="2 of 6 branches missed.">        switch (type) {</span>
+<span class="pc bpc" id="L154" title="2 of 6 branches missed.">        switch (type) {</span>
             case UNKNOWN:
-<span class="nc" id="L155">                return unknownIcon;</span>
+<span class="nc" id="L156">                return unknownIcon;</span>
             case INFORMATION:
-<span class="fc" id="L157">                return informationIcon;</span>
+<span class="fc" id="L158">                return informationIcon;</span>
             case SUCCESS:
-<span class="fc" id="L159">                return successIcon;</span>
+<span class="fc" id="L160">                return successIcon;</span>
             case WARNING:
-<span class="nc" id="L161">                return warningIcon;</span>
+<span class="nc" id="L162">                return warningIcon;</span>
             case DANGER:
-<span class="fc" id="L163">                return dangerIcon;</span>
+<span class="fc" id="L164">                return dangerIcon;</span>
             case NONE:
             default:
                 // ignored, so return empty string
-<span class="fc" id="L167">                return &quot;&quot;;</span>
+<span class="fc" id="L168">                return &quot;&quot;;</span>
         }
     }
 
@@ -176,21 +177,21 @@ public class JInputValidatorPreferences {
      *         type is {@link Validation.Type#NONE} or not recognized
      */
     public Color getColor(Validation.Type type) {
-<span class="pc bpc" id="L179" title="4 of 6 branches missed.">        switch (type) {</span>
+<span class="pc bpc" id="L180" title="4 of 6 branches missed.">        switch (type) {</span>
             case UNKNOWN:
-<span class="nc" id="L181">                return unknownColor;</span>
+<span class="nc" id="L182">                return unknownColor;</span>
             case INFORMATION:
-<span class="fc" id="L183">                return informationColor;</span>
+<span class="fc" id="L184">                return informationColor;</span>
             case SUCCESS:
-<span class="nc" id="L185">                return successColor;</span>
+<span class="nc" id="L186">                return successColor;</span>
             case WARNING:
-<span class="nc" id="L187">                return warningColor;</span>
+<span class="nc" id="L188">                return warningColor;</span>
             case DANGER:
-<span class="nc" id="L189">                return dangerColor;</span>
+<span class="nc" id="L190">                return dangerColor;</span>
             case NONE:
             default:
                 // ignored, so return anything
-<span class="fc" id="L193">                return SystemColor.textText;</span>
+<span class="fc" id="L194">                return SystemColor.textText;</span>
         }
     }
 }
