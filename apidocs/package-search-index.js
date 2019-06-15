@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.alexandriasoftware.swing"},{"l":"com.alexandriasoftware.swing.border"}]
