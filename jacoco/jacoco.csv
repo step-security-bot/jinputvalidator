@@ -1,10 +1,10 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 JInputValidator,com.alexandriasoftware.swing,NonVerifyingValidator,6,15,0,0,2,6,1,3,1,3
-JInputValidator,com.alexandriasoftware.swing,VerifyingValidator,21,26,0,2,4,6,2,3,2,2
+JInputValidator,com.alexandriasoftware.swing,VerifyingValidator,20,37,1,3,5,9,3,3,2,2
 JInputValidator,com.alexandriasoftware.swing,Validation.Type,0,64,0,0,0,7,0,1,0,1
-JInputValidator,com.alexandriasoftware.swing,Validation,0,40,0,0,0,12,0,7,0,7
+JInputValidator,com.alexandriasoftware.swing,Validation,4,85,2,6,2,23,2,12,0,10
 JInputValidator,com.alexandriasoftware.swing,JInputValidator.new DocumentListener() {...},0,56,0,2,0,14,0,6,0,5
 JInputValidator,com.alexandriasoftware.swing,JInputValidatorPreferences,39,174,6,8,10,32,7,12,1,7
-JInputValidator,com.alexandriasoftware.swing,JInputValidator,22,220,8,14,8,53,7,20,1,15
+JInputValidator,com.alexandriasoftware.swing,JInputValidator,22,258,9,19,8,62,8,25,1,18
 JInputValidator,com.alexandriasoftware.swing.border,ValidatorBorder.new AbstractBorder() {...},80,29,0,0,12,5,2,2,2,2
 JInputValidator,com.alexandriasoftware.swing.border,ValidatorBorder,0,48,0,2,0,10,0,3,0,2

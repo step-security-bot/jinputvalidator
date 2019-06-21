@@ -17,6 +17,8 @@ package com.alexandriasoftware.swing;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 
 /**
  * A Validation is the combination of a validation state and the tool tip to
@@ -28,7 +30,7 @@ public class Validation {
 
     private final Type type;
     private final String message;
-    private final JInputValidatorPreferences preferences;
+    private JInputValidatorPreferences preferences;
 
     /**
      * The Validation state. The states {@link Type#DANGER} and
@@ -36,66 +38,69 @@ public class Validation {
      * {@link JInputValidator#verify(javax.swing.JComponent)} and all other
      * states are considered valid.
      */
-<span class="fc" id="L39">    public enum Type {</span>
+<span class="fc" id="L41">    public enum Type {</span>
         /**
          * Default state with no validation icon or tool tip displayed. If the
          * component being validated has a default tool tip, that tool tip is
          * displayed.
          */
-<span class="fc" id="L45">        NONE,</span>
+<span class="fc" id="L47">        NONE,</span>
         /**
          * Validation state with an unknown icon and tool tip. By default the
          * icon is a question mark in a circle in the default border color.
          * Considered informative and valid.
          */
-<span class="fc" id="L51">        UNKNOWN,</span>
+<span class="fc" id="L53">        UNKNOWN,</span>
         /**
          * Validation state with an information icon and tool tip. By default
          * the icon is a letter I in a circle in the default border color.
          * Considered informative and valid.
          */
-<span class="fc" id="L57">        INFORMATION,</span>
+<span class="fc" id="L59">        INFORMATION,</span>
         /**
          * Validation state with a success icon and tool tip. By default the
          * icon is a check mark in a circle in green. Considered informative and
          * valid.
          */
-<span class="fc" id="L63">        SUCCESS,</span>
+<span class="fc" id="L65">        SUCCESS,</span>
         /**
          * Validation state with an warning icon and tool tip. By default the
          * icon is an exclamation mark in a triangle in yellow. Considered
          * invalid.
          */
-<span class="fc" id="L69">        WARNING,</span>
+<span class="fc" id="L71">        WARNING,</span>
         /**
          * Validation state with an danger icon and tool tip. By default the
          * icon is a letter X in a circle in red. Considered invalid.
          */
-<span class="fc" id="L74">        DANGER,</span>
+<span class="fc" id="L76">        DANGER,</span>
     }
 
     /**
      * Create a validation with default preferences.
+     * &lt;p&gt;
+     * This constructor should not be used within
+     * {@link JInputValidator#getValidation(javax.swing.JComponent, com.alexandriasoftware.swing.JInputValidatorPreferences)}.
      *
-     * @param type    the type of validation
+     * @param type the type of validation
      * @param message the tool tip text
      */
     public Validation(Type type, String message) {
-<span class="fc" id="L84">        this(type, message, JInputValidatorPreferences.getPreferences());</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L89">        this(type, message, JInputValidatorPreferences.getPreferences());</span>
+<span class="fc" id="L90">    }</span>
 
     /**
      * Create a validation with custom preferences.
      *
-     * @param type        the type of validation
-     * @param message     the tool tip text
+     * @param type the type of validation
+     * @param message the tool tip text
      * @param preferences the preferences to use
      */
-<span class="fc" id="L94">    public Validation(Type type, String message, JInputValidatorPreferences preferences) {</span>
-<span class="fc" id="L95">        this.type = type;</span>
-<span class="fc" id="L96">        this.message = message;</span>
-<span class="fc" id="L97">        this.preferences = preferences;</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L99">    public Validation(Type type, String message, @Nonnull JInputValidatorPreferences preferences) {</span>
+<span class="fc" id="L100">        this.type = type;</span>
+<span class="fc" id="L101">        this.message = message;</span>
+<span class="fc" id="L102">        this.preferences = preferences;</span>
+<span class="fc" id="L103">    }</span>
 
     /**
      * Get the validation type.
@@ -103,7 +108,7 @@ public class Validation {
      * @return the validation type
      */
     public Type getType() {
-<span class="fc" id="L106">        return type;</span>
+<span class="fc" id="L111">        return type;</span>
     }
 
     /**
@@ -113,7 +118,7 @@ public class Validation {
      * @return the tool tip text
      */
     public String getMessage() {
-<span class="fc" id="L116">        return message;</span>
+<span class="fc" id="L121">        return message;</span>
     }
 
     /**
@@ -121,8 +126,9 @@ public class Validation {
      *
      * @return the icon text
      */
+    @Nonnull
     public String getIcon() {
-<span class="fc" id="L125">        return preferences.getIcon(type);</span>
+<span class="fc" id="L131">        return preferences.getIcon(type);</span>
     }
 
     /**
@@ -130,8 +136,9 @@ public class Validation {
      *
      * @return the color to use
      */
+    @Nonnull
     public Color getColor() {
-<span class="fc" id="L134">        return preferences.getColor(type);</span>
+<span class="fc" id="L141">        return preferences.getColor(type);</span>
     }
 
     /**
@@ -139,8 +146,41 @@ public class Validation {
      *
      * @return the font to use
      */
+    @Nonnull
     public Font getFont() {
-<span class="fc" id="L143">        return preferences.getFont();</span>
+<span class="fc" id="L151">        return preferences.getFont();</span>
+    }
+
+    /**
+     * Set the preferences to use with this Validation.
+     *
+     * @param preferences the preferences to set
+     */
+    // package private
+    void setPreferences(@Nonnull JInputValidatorPreferences preferences) {
+<span class="fc" id="L161">        this.preferences = preferences;</span>
+<span class="fc" id="L162">    }</span>
+    
+    @Override
+    public int hashCode() {
+<span class="fc" id="L166">        int hash = 5;</span>
+<span class="fc" id="L167">        hash = 79 * hash + Objects.hashCode(this.type);</span>
+<span class="fc" id="L168">        hash = 79 * hash + Objects.hashCode(this.message);</span>
+<span class="fc" id="L169">        return hash;</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        if (this == obj) {</span>
+<span class="fc" id="L175">            return true;</span>
+        }
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (obj == null) {</span>
+<span class="nc" id="L178">            return false;</span>
+        }
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">        if (getClass() != obj.getClass()) {</span>
+<span class="nc" id="L181">            return false;</span>
+        }
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        return this.hashCode() == obj.hashCode();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

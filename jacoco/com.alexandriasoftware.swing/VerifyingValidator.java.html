@@ -64,7 +64,7 @@ public class VerifyingValidator extends JInputValidator {
      *                  changes
      */
     public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, Validation invalid, boolean onInput) {
-<span class="nc" id="L67">        this(component, verifier, invalid, new Validation(Validation.Type.NONE, &quot;&quot;, JInputValidatorPreferences.getPreferences()), onInput, JInputValidatorPreferences.getPreferences());</span>
+<span class="nc" id="L67">        this(component, verifier, invalid, null, onInput, JInputValidatorPreferences.getPreferences());</span>
 <span class="nc" id="L68">    }</span>
 
     /**
@@ -83,12 +83,18 @@ public class VerifyingValidator extends JInputValidator {
      *                    changes
      * @param preferences the preferences to use to draw the validation icons
      */
-    public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, Validation invalid, Validation valid, boolean onInput, @Nonnull JInputValidatorPreferences preferences) {
+    public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, @Nonnull Validation invalid, Validation valid, boolean onInput, @Nonnull JInputValidatorPreferences preferences) {
 <span class="fc" id="L87">        super(component, onInput, preferences);</span>
 <span class="fc" id="L88">        this.verifier = verifier;</span>
 <span class="fc" id="L89">        this.invalid = invalid;</span>
-<span class="fc" id="L90">        this.valid = valid;</span>
-<span class="fc" id="L91">    }</span>
+<span class="fc" id="L90">        setValidationPreferences(this.invalid);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (valid != null) {</span>
+<span class="fc" id="L92">            this.valid = valid;</span>
+<span class="fc" id="L93">            setValidationPreferences(this.valid);</span>
+        } else {
+<span class="nc" id="L95">            this.valid = getNoneValidation();</span>
+        }
+<span class="fc" id="L97">    }</span>
 
     /**
      * Get the validation for the current result of calling
@@ -101,7 +107,7 @@ public class VerifyingValidator extends JInputValidator {
      */
     @Override
     protected Validation getValidation(JComponent input, JInputValidatorPreferences preferences) {
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        return verifier.verify(input) ? valid : invalid;</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        return verifier.verify(input) ? valid : invalid;</span>
     }
 
 }
