@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2019</copyright>
     <item>
-      <title>File: 6,
-             Errors: 195,
+      <title>File: 9,
+             Errors: 247,
              Warnings: 0,
              Infos: 0
       </title>
@@ -46,6 +46,20 @@ under the License.
           <tbody>
                           <tr>
                 <td>
+                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.PredicateValidator.java">com/alexandriasoftware/swing/PredicateValidator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  44
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.JInputValidator.java">com/alexandriasoftware/swing/JInputValidator.java</a>
                 </td>
                 <td>
@@ -55,7 +69,21 @@ under the License.
                   0
                 </td>
                 <td>
-                  61
+                  70
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.PredicateValidatorBeanInfo.java">com/alexandriasoftware/swing/PredicateValidatorBeanInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>
@@ -74,20 +102,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.NonVerifyingValidator.java">com/alexandriasoftware/swing/NonVerifyingValidator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  9
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.VerifyingValidator.java">com/alexandriasoftware/swing/VerifyingValidator.java</a>
                 </td>
                 <td>
@@ -97,7 +111,35 @@ under the License.
                   0
                 </td>
                 <td>
-                  36
+                  44
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.VerifyingValidatorBeanInfo.java">com/alexandriasoftware/swing/VerifyingValidatorBeanInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.JInputValidatorBeanInfo.java">com/alexandriasoftware/swing/JInputValidatorBeanInfo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
               </tr>
                           <tr>

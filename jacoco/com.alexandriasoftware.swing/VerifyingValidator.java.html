@@ -33,8 +33,8 @@ public class VerifyingValidator extends JInputValidator {
 
     /**
      * Create a VerifyingValidator. This is the same as calling
-     * {@link #VerifyingValidator(javax.swing.JComponent, javax.swing.InputVerifier, com.alexandriasoftware.swing.Validation, boolean)}
-     * with the onInput parameter false.
+     * {@link #VerifyingValidator(javax.swing.JComponent, javax.swing.InputVerifier, com.alexandriasoftware.swing.Validation, boolean, boolean)}
+     * with the onInput and isVerifying parameters true.
      *
      * @param component the component to verify
      * @param verifier  the verifier to use
@@ -43,29 +43,32 @@ public class VerifyingValidator extends JInputValidator {
      *                  method of the verifier returns false
      */
     public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, Validation invalid) {
-<span class="nc" id="L46">        this(component, verifier, invalid, false);</span>
+<span class="nc" id="L46">        this(component, verifier, invalid, true, true);</span>
 <span class="nc" id="L47">    }</span>
 
     /**
      * Create a VerifyingValidator. This is the same as calling
-     * {@link #VerifyingValidator(javax.swing.JComponent, javax.swing.InputVerifier, com.alexandriasoftware.swing.Validation, com.alexandriasoftware.swing.Validation, boolean, com.alexandriasoftware.swing.JInputValidatorPreferences)}
+     * {@link #VerifyingValidator(javax.swing.JComponent, javax.swing.InputVerifier, com.alexandriasoftware.swing.Validation, com.alexandriasoftware.swing.Validation, boolean, boolean, com.alexandriasoftware.swing.JInputValidatorPreferences)}
      * with a {@link Validation} that has type {@link Validation.Type#NONE} for
      * the valid parameter and
      * {@link JInputValidatorPreferences#getPreferences()} for the preferences
      * parameter.
      *
-     * @param component the component to verify
-     * @param verifier  the verifier to use
-     * @param invalid   the validation to use when the
-     *                  {@link javax.swing.InputVerifier#verify(javax.swing.JComponent)}
-     *                  method of the verifier returns false
-     * @param onInput   true if validation should occur on every change to
-     *                  input; false if validation should only occur on focus
-     *                  changes
+     * @param component   the component to verify
+     * @param verifier    the verifier to use
+     * @param invalid     the validation to use when the
+     *                    {@link javax.swing.InputVerifier#verify(javax.swing.JComponent)}
+     *                    method of the verifier returns false
+     * @param onInput     true if validation should occur on every change to
+     *                    input; false if validation should only occur on focus
+     *                    changes
+     * @param isVerifying {@code true} if validator is to return true or false
+     *                    per {@link javax.swing.InputVerifier#verify(javax.swing.JComponent)};
+     *                    {@code false} to always return {@code true} for that method.
      */
-    public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, Validation invalid, boolean onInput) {
-<span class="nc" id="L67">        this(component, verifier, invalid, null, onInput, JInputValidatorPreferences.getPreferences());</span>
-<span class="nc" id="L68">    }</span>
+    public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, Validation invalid, boolean onInput, boolean isVerifying) {
+<span class="nc" id="L70">        this(component, verifier, invalid, null, onInput, isVerifying, JInputValidatorPreferences.getPreferences());</span>
+<span class="nc" id="L71">    }</span>
 
     /**
      * Create a VerifyingValidator.
@@ -78,23 +81,26 @@ public class VerifyingValidator extends JInputValidator {
      * @param valid       the validation to use when the
      *                    {@link javax.swing.InputVerifier#verify(javax.swing.JComponent)}
      *                    method of the verifier returns true
-     * @param onInput     true if validation should occur on every change to
-     *                    input; false if validation should only occur on focus
+     * @param onInput     {@code true} if validation should occur on every change to
+     *                    input; {@code false} if validation should only occur on focus
      *                    changes
+     * @param isVerifying {@code true} if validator is to return true or false
+     *                    per {@link javax.swing.InputVerifier#verify(javax.swing.JComponent)};
+     *                    {@code false} to always return {@code true} for that method.
      * @param preferences the preferences to use to draw the validation icons
      */
-    public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, @Nonnull Validation invalid, Validation valid, boolean onInput, @Nonnull JInputValidatorPreferences preferences) {
-<span class="fc" id="L87">        super(component, onInput, preferences);</span>
-<span class="fc" id="L88">        this.verifier = verifier;</span>
-<span class="fc" id="L89">        this.invalid = invalid;</span>
-<span class="fc" id="L90">        setValidationPreferences(this.invalid);</span>
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (valid != null) {</span>
-<span class="fc" id="L92">            this.valid = valid;</span>
-<span class="fc" id="L93">            setValidationPreferences(this.valid);</span>
+    public VerifyingValidator(@Nonnull JComponent component, @Nonnull InputVerifier verifier, @Nonnull Validation invalid, Validation valid, boolean onInput, boolean isVerifying, @Nonnull JInputValidatorPreferences preferences) {
+<span class="fc" id="L93">        super(component, onInput, isVerifying, preferences);</span>
+<span class="fc" id="L94">        this.verifier = verifier;</span>
+<span class="fc" id="L95">        this.invalid = invalid;</span>
+<span class="fc" id="L96">        setValidationPreferences(this.invalid);</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (valid != null) {</span>
+<span class="fc" id="L98">            this.valid = valid;</span>
+<span class="fc" id="L99">            setValidationPreferences(this.valid);</span>
         } else {
-<span class="nc" id="L95">            this.valid = getNoneValidation();</span>
+<span class="nc" id="L101">            this.valid = getNoneValidation();</span>
         }
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L103">    }</span>
 
     /**
      * Get the validation for the current result of calling
@@ -107,7 +113,7 @@ public class VerifyingValidator extends JInputValidator {
      */
     @Override
     protected Validation getValidation(JComponent input, JInputValidatorPreferences preferences) {
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        return verifier.verify(input) ? valid : invalid;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        return verifier.verify(input) ? valid : invalid;</span>
     }
 
 }

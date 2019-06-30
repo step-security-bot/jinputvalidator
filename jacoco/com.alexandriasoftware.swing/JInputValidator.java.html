@@ -36,18 +36,20 @@ import javax.swing.text.JTextComponent;
  * text indicating validation status to the component being verified.
  *
  * @author Randall Wood
- * @see NonVerifyingValidator
+ * @see PredicateValidator
+ * @see VerifyingValidator
  */
 public abstract class JInputValidator extends InputVerifier {
 
     private final Border originalBorder;
-<span class="fc" id="L44">    private String originalToolTipText = null;</span>
-<span class="fc" id="L45">    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);</span>
+<span class="fc" id="L45">    private String originalToolTipText = null;</span>
+<span class="fc" id="L46">    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);</span>
     private Validation validation;
     private Validation oldValidation;
     private final JInputValidatorPreferences preferences;
     private final JComponent component;
     private boolean verifying;
+    private boolean isVerifying;
 
     /**
      * Create a JInputValidator with the default preferences. The validator
@@ -57,43 +59,77 @@ public abstract class JInputValidator extends InputVerifier {
      * @param component the component to attach the validator to
      */
     public JInputValidator(@Nonnull JComponent component) {
-<span class="fc" id="L60">        this(component, true);</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L62">        this(component, true, true);</span>
+<span class="fc" id="L63">    }</span>
 
     /**
      * Create a JInputValidator with the default preferences.
      *
-     * @param component the component to attach the validator to
-     * @param onInput {@code true} if validator to validate on all input;
-     * {@code false} to validate only on focus change; note this has no effect
-     * if component is not a {@link javax.swing.text.JTextComponent}
+     * @param component   the component to attach the validator to
+     * @param onInput     {@code true} if validator to validate on all input;
+     *                    {@code false} to validate only on focus change; note
+     *                    this has no effect if component is not a
+     *                    {@link javax.swing.text.JTextComponent}
+     * @param isVerifying {@code true} if validator is to return true or false
+     *                    per
+     *                    {@link #verify(javax.swing.JComponent)}; {@code false}
+     *                    to always return {@code true} for that method.
      */
-    public JInputValidator(@Nonnull JComponent component, boolean onInput) {
-<span class="fc" id="L72">        this(component, onInput, JInputValidatorPreferences.getPreferences());</span>
-<span class="fc" id="L73">    }</span>
+    public JInputValidator(@Nonnull JComponent component, boolean onInput, boolean isVerifying) {
+<span class="fc" id="L79">        this(component, onInput, isVerifying, JInputValidatorPreferences.getPreferences());</span>
+<span class="fc" id="L80">    }</span>
 
     /**
      * Create a JInputValidator with custom preferences.
      *
-     * @param component the component to attach the validator to
-     * @param onInput {@code true} if validator to validate on all input;
-     * {@code false} to validate only on focus change; note this has no effect
-     * if component is not a {@link javax.swing.text.JTextComponent}
+     * @param component   the component to attach the validator to
+     * @param onInput     {@code true} if validator to validate on all input;
+     *                    {@code false} to validate only on focus change; note
+     *                    this has no effect if component is not a
+     *                    {@link javax.swing.text.JTextComponent}
+     * @param isVerifying {@code true} if validator is to return true or false
+     *                    per
+     *                    {@link #verify(javax.swing.JComponent)}; {@code false}
+     *                    to always return {@code true} for that method.
      * @param preferences the custom preferences
      */
-<span class="fc" id="L84">    public JInputValidator(@Nonnull JComponent component, boolean onInput, @Nonnull JInputValidatorPreferences preferences) {</span>
-<span class="fc" id="L85">        this.component = component;</span>
-<span class="fc" id="L86">        originalBorder = this.component.getBorder();</span>
-<span class="fc" id="L87">        originalToolTipText = this.component.getToolTipText();</span>
-<span class="pc bpc" id="L88" title="1 of 4 branches missed.">        if (onInput &amp;&amp; this.component instanceof JTextComponent) {</span>
-<span class="fc" id="L89">            addChangeListener((JTextComponent) this.component, (e) -&gt; {</span>
-<span class="fc" id="L90">                verify(this.component);</span>
-<span class="fc" id="L91">            });</span>
+<span class="fc" id="L96">    public JInputValidator(@Nonnull JComponent component, boolean onInput, boolean isVerifying, @Nonnull JInputValidatorPreferences preferences) {</span>
+<span class="fc" id="L97">        this.component = component;</span>
+<span class="fc" id="L98">        originalBorder = this.component.getBorder();</span>
+<span class="fc" id="L99">        originalToolTipText = this.component.getToolTipText();</span>
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">        if (onInput &amp;&amp; this.component instanceof JTextComponent) {</span>
+<span class="fc" id="L101">            addChangeListener((JTextComponent) this.component, (e) -&gt; {</span>
+<span class="fc" id="L102">                verify(this.component);</span>
+<span class="fc" id="L103">            });</span>
         }
-<span class="fc" id="L93">        this.preferences = preferences;</span>
-<span class="fc" id="L94">        validation = getNoneValidation();</span>
-<span class="fc" id="L95">        oldValidation = getNoneValidation();</span>
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L105">        this.preferences = preferences;</span>
+<span class="fc" id="L106">        this.isVerifying = isVerifying;</span>
+<span class="fc" id="L107">        validation = getNoneValidation();</span>
+<span class="fc" id="L108">        oldValidation = getNoneValidation();</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Set if this validator is verifying when
+     * {@link #verify(javax.swing.JComponent)} is called. When not verifying
+     * {@link #verify(javax.swing.JComponent)} always returns {@code true}. When
+     * verifying, that method returns {@code false} if the current {@link Type}
+     * is {@link Type#WARNING} or {@link Type#DANGER}.
+     *
+     * @param isVerifying {@code true} if verifying; {@code false} if not
+     */
+    public void setVerifying(boolean isVerifying) {
+<span class="nc" id="L121">        this.isVerifying = isVerifying;</span>
+<span class="nc" id="L122">    }</span>
+
+    /**
+     * Check if this validator is verifying when
+     * {@link #verify(javax.swing.JComponent)} is called.
+     *
+     * @return {@code true} if verifying; {@code false} if not
+     */
+    public boolean isVerifying() {
+<span class="nc" id="L131">        return isVerifying;</span>
+    }
 
     /**
      * Set the tool tip text used when the validation state is
@@ -101,14 +137,14 @@ public abstract class JInputValidator extends InputVerifier {
      * calling this method, the component's tool tip text is changed as well.
      *
      * @param toolTipText the default tool tip text for the component being
-     * validated
+     *                    validated
      */
     public void setToolTipText(String toolTipText) {
-<span class="fc" id="L107">        originalToolTipText = toolTipText;</span>
-<span class="pc bpc" id="L108" title="2 of 4 branches missed.">        if (validation == null || validation.getType() == Type.NONE) {</span>
-<span class="fc" id="L109">            component.setToolTipText(toolTipText);</span>
+<span class="fc" id="L143">        originalToolTipText = toolTipText;</span>
+<span class="pc bpc" id="L144" title="2 of 4 branches missed.">        if (validation == null || validation.getType() == Type.NONE) {</span>
+<span class="fc" id="L145">            component.setToolTipText(toolTipText);</span>
         }
-<span class="fc" id="L111">    }</span>
+<span class="fc" id="L147">    }</span>
 
     /**
      * Get the tool tip text used when the validation state is
@@ -117,7 +153,7 @@ public abstract class JInputValidator extends InputVerifier {
      * @return the tool tip text
      */
     public String getToolTipText() {
-<span class="fc" id="L120">        return originalToolTipText;</span>
+<span class="fc" id="L156">        return originalToolTipText;</span>
     }
 
     /**
@@ -128,13 +164,13 @@ public abstract class JInputValidator extends InputVerifier {
      */
     @Nonnull
     public final Validation getValidation() {
-<span class="fc" id="L131">        return validation;</span>
+<span class="fc" id="L167">        return validation;</span>
     }
 
     /**
      * Get the validation object for the current state of the input component.
      *
-     * @param input the component to get the state of
+     * @param input       the component to get the state of
      * @param preferences preferences to use for creating the validation
      * @return the validation for the current state
      */
@@ -148,27 +184,30 @@ public abstract class JInputValidator extends InputVerifier {
      * be retrieved afterwards using {@link #getValidation()}.
      *
      * @return {@code false} if {@link Validation#getType()} equals
-     * {@link Validation.Type#DANGER} or {@link Validation.Type#WARNING};
-     * otherwise returns {@code true}
+     *         {@link Validation.Type#DANGER} or {@link Validation.Type#WARNING}
+     *         and {@link #isVerifying} is {@code true}; otherwise returns
+     *         {@code true}
      */
     @Override
     public boolean verify(JComponent input) {
-<span class="fc" id="L156">        oldValidation = validation;</span>
-<span class="fc" id="L157">        validation = getValidation(input, preferences);</span>
-<span class="fc bfc" id="L158" title="All 4 branches covered.">        if (!validation.equals(oldValidation) &amp;&amp; !verifying) {</span>
-<span class="fc" id="L159">            verifying = true;</span>
-<span class="fc bfc" id="L160" title="All 2 branches covered.">            if (validation.getType() == Type.NONE) {</span>
-<span class="fc" id="L161">                input.setBorder(originalBorder);</span>
-<span class="fc" id="L162">                input.setToolTipText(originalToolTipText);</span>
+<span class="fc" id="L193">        oldValidation = validation;</span>
+<span class="fc" id="L194">        validation = getValidation(input, preferences);</span>
+<span class="fc bfc" id="L195" title="All 4 branches covered.">        if (!validation.equals(oldValidation) &amp;&amp; !verifying) {</span>
+<span class="fc" id="L196">            verifying = true;</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            if (validation.getType() == Type.NONE) {</span>
+<span class="fc" id="L198">                input.setBorder(originalBorder);</span>
+<span class="fc" id="L199">                input.setToolTipText(originalToolTipText);</span>
             } else {
-<span class="fc" id="L164">                input.setBorder(new ValidatorBorder(validation, originalBorder));</span>
-<span class="fc" id="L165">                input.setToolTipText(validation.getMessage());</span>
+<span class="fc" id="L201">                input.setBorder(new ValidatorBorder(validation, originalBorder));</span>
+<span class="fc" id="L202">                input.setToolTipText(validation.getMessage());</span>
             }
-<span class="fc" id="L167">            input.validate();</span>
-<span class="fc" id="L168">            pcs.firePropertyChange(&quot;validation&quot;, oldValidation, validation);</span>
-<span class="fc" id="L169">            verifying = false;</span>
+<span class="fc" id="L204">            input.validate();</span>
+<span class="fc" id="L205">            pcs.firePropertyChange(&quot;validation&quot;, oldValidation, validation);</span>
+<span class="fc" id="L206">            verifying = false;</span>
         }
-<span class="pc bpc" id="L171" title="1 of 4 branches missed.">        return validation.getType() != Type.WARNING &amp;&amp; validation.getType() != Type.DANGER;</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        return isVerifying</span>
+<span class="pc bpc" id="L209" title="1 of 4 branches missed.">                ? validation.getType() != Type.WARNING &amp;&amp; validation.getType() != Type.DANGER</span>
+<span class="nc" id="L210">                : true;</span>
     }
 
     /**
@@ -178,8 +217,8 @@ public abstract class JInputValidator extends InputVerifier {
      * @param validation the validation to set preferences for
      */
     protected final void setValidationPreferences(Validation validation) {
-<span class="fc" id="L181">        validation.setPreferences(preferences);</span>
-<span class="fc" id="L182">    }</span>
+<span class="fc" id="L220">        validation.setPreferences(preferences);</span>
+<span class="fc" id="L221">    }</span>
 
     /**
      * Trims input and removes the leading {@code &lt;html&gt;} and trailing
@@ -189,14 +228,14 @@ public abstract class JInputValidator extends InputVerifier {
      * @return the modified input
      */
     protected final String trimHtmlTags(String input) {
-<span class="fc" id="L192">        String output = input.trim();</span>
-<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (output.startsWith(&quot;&lt;html&gt;&quot;)) {</span>
-<span class="fc" id="L194">            output = output.substring(6);</span>
+<span class="fc" id="L231">        String output = input.trim();</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">        if (output.startsWith(&quot;&lt;html&gt;&quot;)) {</span>
+<span class="fc" id="L233">            output = output.substring(6);</span>
         }
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (output.endsWith(&quot;&lt;/html&gt;&quot;)) {</span>
-<span class="fc" id="L197">            output = output.substring(0, output.length() - 7);</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (output.endsWith(&quot;&lt;/html&gt;&quot;)) {</span>
+<span class="fc" id="L236">            output = output.substring(0, output.length() - 7);</span>
         }
-<span class="fc" id="L199">        return output.trim();</span>
+<span class="fc" id="L238">        return output.trim();</span>
     }
 
     /**
@@ -208,83 +247,83 @@ public abstract class JInputValidator extends InputVerifier {
      * @return a new Validation with Type.NONE
      */
     public final Validation getNoneValidation() {
-<span class="fc" id="L211">        return new Validation(Type.NONE, getToolTipText(), preferences);</span>
+<span class="fc" id="L250">        return new Validation(Type.NONE, getToolTipText(), preferences);</span>
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-<span class="fc" id="L215">        pcs.addPropertyChangeListener(listener);</span>
-<span class="fc" id="L216">    }</span>
+<span class="fc" id="L254">        pcs.addPropertyChangeListener(listener);</span>
+<span class="fc" id="L255">    }</span>
 
     public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-<span class="fc" id="L219">        pcs.addPropertyChangeListener(propertyName, listener);</span>
-<span class="fc" id="L220">    }</span>
+<span class="fc" id="L258">        pcs.addPropertyChangeListener(propertyName, listener);</span>
+<span class="fc" id="L259">    }</span>
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-<span class="fc" id="L223">        pcs.removePropertyChangeListener(listener);</span>
-<span class="fc" id="L224">    }</span>
+<span class="fc" id="L262">        pcs.removePropertyChangeListener(listener);</span>
+<span class="fc" id="L263">    }</span>
 
     public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-<span class="fc" id="L227">        pcs.removePropertyChangeListener(propertyName, listener);</span>
-<span class="fc" id="L228">    }</span>
+<span class="fc" id="L266">        pcs.removePropertyChangeListener(propertyName, listener);</span>
+<span class="fc" id="L267">    }</span>
 
     public PropertyChangeListener[] getPropertyChangeListeners() {
-<span class="fc" id="L231">        return pcs.getPropertyChangeListeners();</span>
+<span class="fc" id="L270">        return pcs.getPropertyChangeListeners();</span>
     }
 
     public PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
-<span class="fc" id="L235">        return pcs.getPropertyChangeListeners(propertyName);</span>
+<span class="fc" id="L274">        return pcs.getPropertyChangeListeners(propertyName);</span>
     }
 
     private void addChangeListener(@Nonnull JTextComponent component, @Nonnull ChangeListener changeListener) {
-<span class="fc" id="L239">        DocumentListener listener = new DocumentListener() {</span>
-<span class="fc" id="L240">            private int lastChange = 0;</span>
-<span class="fc" id="L241">            private int lastNotifiedChange = 0;</span>
+<span class="fc" id="L278">        DocumentListener listener = new DocumentListener() {</span>
+<span class="fc" id="L279">            private int lastChange = 0;</span>
+<span class="fc" id="L280">            private int lastNotifiedChange = 0;</span>
 
             /**
              * {@inheritDoc}
              */
             @Override
             public void insertUpdate(DocumentEvent e) {
-<span class="fc" id="L248">                changedUpdate(e);</span>
-<span class="fc" id="L249">            }</span>
+<span class="fc" id="L287">                changedUpdate(e);</span>
+<span class="fc" id="L288">            }</span>
 
             /**
              * {@inheritDoc}
              */
             @Override
             public void removeUpdate(DocumentEvent e) {
-<span class="fc" id="L256">                changedUpdate(e);</span>
-<span class="fc" id="L257">            }</span>
+<span class="fc" id="L295">                changedUpdate(e);</span>
+<span class="fc" id="L296">            }</span>
 
             /**
              * {@inheritDoc}
              */
             @Override
             public void changedUpdate(DocumentEvent e) {
-<span class="fc" id="L264">                lastChange++;</span>
-<span class="fc" id="L265">                SwingUtilities.invokeLater(() -&gt; {</span>
-<span class="fc bfc" id="L266" title="All 2 branches covered.">                    if (lastNotifiedChange != lastChange) {</span>
-<span class="fc" id="L267">                        lastNotifiedChange = lastChange;</span>
-<span class="fc" id="L268">                        changeListener.stateChanged(new ChangeEvent(component));</span>
+<span class="fc" id="L303">                lastChange++;</span>
+<span class="fc" id="L304">                SwingUtilities.invokeLater(() -&gt; {</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">                    if (lastNotifiedChange != lastChange) {</span>
+<span class="fc" id="L306">                        lastNotifiedChange = lastChange;</span>
+<span class="fc" id="L307">                        changeListener.stateChanged(new ChangeEvent(component));</span>
                     }
-<span class="fc" id="L270">                });</span>
-<span class="fc" id="L271">            }</span>
+<span class="fc" id="L309">                });</span>
+<span class="fc" id="L310">            }</span>
         };
-<span class="fc" id="L273">        component.addPropertyChangeListener(&quot;document&quot;, (e) -&gt; {</span>
-<span class="nc" id="L274">            Document oldDocument = (Document) e.getOldValue();</span>
-<span class="nc" id="L275">            Document newDocument = (Document) e.getNewValue();</span>
-<span class="nc bnc" id="L276" title="All 2 branches missed.">            if (oldDocument != null) {</span>
-<span class="nc" id="L277">                oldDocument.removeDocumentListener(listener);</span>
+<span class="fc" id="L312">        component.addPropertyChangeListener(&quot;document&quot;, (e) -&gt; {</span>
+<span class="nc" id="L313">            Document oldDocument = (Document) e.getOldValue();</span>
+<span class="nc" id="L314">            Document newDocument = (Document) e.getNewValue();</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">            if (oldDocument != null) {</span>
+<span class="nc" id="L316">                oldDocument.removeDocumentListener(listener);</span>
             }
-<span class="nc bnc" id="L279" title="All 2 branches missed.">            if (newDocument != null) {</span>
-<span class="nc" id="L280">                newDocument.addDocumentListener(listener);</span>
+<span class="nc bnc" id="L318" title="All 2 branches missed.">            if (newDocument != null) {</span>
+<span class="nc" id="L319">                newDocument.addDocumentListener(listener);</span>
             }
-<span class="nc" id="L282">            listener.changedUpdate(null);</span>
-<span class="nc" id="L283">        });</span>
-<span class="fc" id="L284">        Document document = component.getDocument();</span>
-<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        if (document != null) {</span>
-<span class="fc" id="L286">            document.addDocumentListener(listener);</span>
+<span class="nc" id="L321">            listener.changedUpdate(null);</span>
+<span class="nc" id="L322">        });</span>
+<span class="fc" id="L323">        Document document = component.getDocument();</span>
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">        if (document != null) {</span>
+<span class="fc" id="L325">            document.addDocumentListener(listener);</span>
         }
-<span class="fc" id="L288">    }</span>
+<span class="fc" id="L327">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
