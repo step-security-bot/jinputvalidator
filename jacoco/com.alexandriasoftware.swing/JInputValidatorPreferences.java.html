@@ -110,25 +110,25 @@ public class JInputValidatorPreferences {
 
 <span class="fc" id="L111">    private JInputValidatorPreferences(Preferences preferences) {</span>
 <span class="fc" id="L112">        Preferences defaults = Preferences.userNodeForPackage(JInputValidatorPreferences.class);</span>
-<span class="fc" id="L113">        String patternfly = &quot;/org/patternfly/PatternFlyIcons-webfont.ttf&quot;;</span>
+<span class="fc" id="L113">        String fontAwesome = &quot;/com/fontawesome/Font Awesome 5 Free-Solid-900.otf&quot;;</span>
         Font f;
         try {
-<span class="fc" id="L116">            f = Font.createFont(Font.TRUETYPE_FONT, JInputValidatorPreferences.class.getResourceAsStream(preferences.get(&quot;font&quot;, defaults.get(&quot;font&quot;, patternfly))));</span>
+<span class="fc" id="L116">            f = Font.createFont(Font.TRUETYPE_FONT, JInputValidatorPreferences.class.getResourceAsStream(preferences.get(&quot;font&quot;, defaults.get(&quot;font&quot;, fontAwesome))));</span>
         }
 <span class="nc" id="L118">        catch (FontFormatException | IOException ex) {</span>
-<span class="nc" id="L119">            LoggerFactory.getLogger(this.getClass()).error(&quot;Unable to get Font resource named {}&quot;, preferences.get(&quot;font&quot;, patternfly), ex);</span>
+<span class="nc" id="L119">            LoggerFactory.getLogger(this.getClass()).error(&quot;Unable to get Font resource named {}&quot;, preferences.get(&quot;font&quot;, fontAwesome), ex);</span>
 <span class="nc" id="L120">            f = (new JLabel()).getFont();</span>
 <span class="fc" id="L121">        }</span>
 <span class="fc" id="L122">        font = f;</span>
-<span class="fc" id="L123">        unknownIcon = preferences.get(&quot;unknown.icon&quot;, defaults.get(&quot;unknown.icon&quot;, &quot;\ue605&quot;));</span>
+<span class="fc" id="L123">        unknownIcon = preferences.get(&quot;unknown.icon&quot;, defaults.get(&quot;unknown.icon&quot;, &quot;\uf059&quot;));</span>
 <span class="fc" id="L124">        unknownColor = new Color(preferences.getInt(&quot;unknown.color&quot;, defaults.getInt(&quot;inknown.color&quot;, 0x73BCF7)));</span>
-<span class="fc" id="L125">        informationIcon = preferences.get(&quot;information.icon&quot;, defaults.get(&quot;information.icon&quot;, &quot;\ue92b&quot;));</span>
+<span class="fc" id="L125">        informationIcon = preferences.get(&quot;information.icon&quot;, defaults.get(&quot;information.icon&quot;, &quot;\uf05a&quot;));</span>
 <span class="fc" id="L126">        informationColor = new Color(preferences.getInt(&quot;information.color&quot;, defaults.getInt(&quot;information.color&quot;, 0x73BCF7)));</span>
-<span class="fc" id="L127">        successIcon = preferences.get(&quot;success.icon&quot;, defaults.get(&quot;success.icon&quot;, &quot;\ue602&quot;));</span>
+<span class="fc" id="L127">        successIcon = preferences.get(&quot;success.icon&quot;, defaults.get(&quot;success.icon&quot;, &quot;\uf058&quot;));</span>
 <span class="fc" id="L128">        successColor = new Color(preferences.getInt(&quot;success.color&quot;, defaults.getInt(&quot;success.color&quot;, 0x92D400)));</span>
-<span class="fc" id="L129">        warningIcon = preferences.get(&quot;warning.icon&quot;, defaults.get(&quot;warning.icon&quot;, &quot;\ue913&quot;));</span>
+<span class="fc" id="L129">        warningIcon = preferences.get(&quot;warning.icon&quot;, defaults.get(&quot;warning.icon&quot;, &quot;\uf071&quot;));</span>
 <span class="fc" id="L130">        warningColor = new Color(preferences.getInt(&quot;warning.color&quot;, defaults.getInt(&quot;warning.color&quot;, 0xF0AB00)));</span>
-<span class="fc" id="L131">        dangerIcon = preferences.get(&quot;danger.icon&quot;, defaults.get(&quot;danger.icon&quot;, &quot;\ue926&quot;));</span>
+<span class="fc" id="L131">        dangerIcon = preferences.get(&quot;danger.icon&quot;, defaults.get(&quot;danger.icon&quot;, &quot;\uf06a&quot;));</span>
 <span class="fc" id="L132">        dangerColor = new Color(preferences.getInt(&quot;danger.color&quot;, defaults.getInt(&quot;danger.color&quot;, 0xC9190B)));</span>
 <span class="fc" id="L133">    }</span>
 

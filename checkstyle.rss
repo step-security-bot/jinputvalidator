@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2019</copyright>
     <item>
-      <title>File: 9,
-             Errors: 251,
+      <title>File: 6,
+             Errors: 252,
              Warnings: 0,
              Infos: 0
       </title>
@@ -74,20 +74,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.PredicateValidatorBeanInfo.java">com/alexandriasoftware/swing/PredicateValidatorBeanInfo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.Validation.java">com/alexandriasoftware/swing/Validation.java</a>
                 </td>
                 <td>
@@ -116,34 +102,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.VerifyingValidatorBeanInfo.java">com/alexandriasoftware/swing/VerifyingValidatorBeanInfo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.JInputValidatorBeanInfo.java">com/alexandriasoftware/swing/JInputValidatorBeanInfo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="https://rhwood.github.io/jinputvalidator/checkstyle.html#com.alexandriasoftware.swing.JInputValidatorPreferences.java">com/alexandriasoftware/swing/JInputValidatorPreferences.java</a>
                 </td>
                 <td>
@@ -153,7 +111,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  40
+                  41
                 </td>
               </tr>
                           <tr>

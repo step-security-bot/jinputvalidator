@@ -193,7 +193,7 @@ public abstract class JInputValidator extends InputVerifier {
     public boolean verify(JComponent input) {
 <span class="fc" id="L194">        oldValidation = validation;</span>
 <span class="fc" id="L195">        validation = getValidation(input, preferences);</span>
-<span class="pc bpc" id="L196" title="1 of 4 branches missed.">        if (!validation.equals(oldValidation) &amp;&amp; !inVerifyMethod) {</span>
+<span class="fc bfc" id="L196" title="All 4 branches covered.">        if (!validation.equals(oldValidation) &amp;&amp; !inVerifyMethod) {</span>
 <span class="fc" id="L197">            inVerifyMethod = true;</span>
 <span class="fc bfc" id="L198" title="All 2 branches covered.">            if (validation.getType() == Type.NONE) {</span>
 <span class="fc" id="L199">                input.setBorder(originalBorder);</span>
